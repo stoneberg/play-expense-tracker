@@ -1,5 +1,6 @@
 package com.expense.tracker.play.common.audit;
 
+import com.expense.tracker.play.user.domain.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
 
@@ -17,7 +18,8 @@ public class AuditorAwareImpl implements AuditorAware<String> {
 		HttpSession httpSession = request.getSession(false);
 		String creator = "SYSTEM";
 		if (httpSession != null) {
-			creator = (String) httpSession.getAttribute("email");
+			UserSession user = (UserSession) httpSession.getAttribute("user");
+			creator = user.getEmail();
 		}
 		return Optional.ofNullable(creator);
 	}
