@@ -18,4 +18,10 @@ public class CategoryReq {
         }
 
     }
+
+    @Data
+    public static class UpdateDto {
+        private String title;
+        private String description;
+    }
 }

@@ -21,6 +21,14 @@ public class CategoryRes {
 
         private Double totalExpense;
 
+        public FindDto(Category entity) {
+            this.id = entity.getId();
+            this.email = entity.getUser().getEmail();
+            this.title = entity.getTitle();
+            this.description = entity.getDescription();
+            this.totalExpense = entity.getTotalExpense();
+        }
+
         @Builder
         public FindDto(Long id, String email, String title, String description, Double totalExpense) {
             this.id = id;

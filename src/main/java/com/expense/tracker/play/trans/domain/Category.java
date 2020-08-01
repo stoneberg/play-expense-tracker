@@ -63,4 +63,10 @@ public class Category extends BaseEntity {
                 .build();
     }
 
+    // update category
+    public void updateCategory(CategoryReq.UpdateDto dto) {
+        this.title = dto.getTitle();
+        this.description = dto.getDescription();
+    }
+
 }

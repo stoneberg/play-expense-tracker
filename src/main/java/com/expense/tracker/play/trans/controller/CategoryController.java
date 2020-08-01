@@ -2,6 +2,7 @@ package com.expense.tracker.play.trans.controller;
 
 import com.expense.tracker.play.common.exception.ResourceNotFoundException;
 import com.expense.tracker.play.common.exception.UserNotFoundException;
+import com.expense.tracker.play.trans.payload.CategoryReq;
 import com.expense.tracker.play.trans.payload.CategoryReq.CreateDto;
 import com.expense.tracker.play.trans.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -20,19 +21,31 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-//    @GetMapping
-//    public String getAllCategories() {
-//        HttpSession httpSession = request.getSession(false);
-//        String email = (String) httpSession.getAttribute("email");
-////        String username = (String) httpSession.getAttribute("username");
-////        return username + StringUtils.SPACE + email;
-//        categoryService.findAllCategories(email);
-//    }
+    /**
+     * 카테고리 목록 조회
+     * 
+     * @param session
+     * @return
+     * @throws UserNotFoundException
+     */
+    @GetMapping
+    public ResponseEntity<?> getAllCategories(HttpSession session) throws UserNotFoundException {
+        String email = (String) session.getAttribute("email");
+        return new ResponseEntity<>(categoryService.findAllCategories(email), HttpStatus.OK);
+    }
 
+    /**
+     * 카테코리 단건 조회
+     * 
+     * @param categoryId
+     * @param session
+     * @return
+     * @throws UserNotFoundException
+     * @throws ResourceNotFoundException
+     */
     @GetMapping(path = "/{categoryId}")
     public ResponseEntity<?> getCategoryById(@PathVariable("categoryId") Long categoryId, HttpSession session) throws UserNotFoundException, ResourceNotFoundException {
         String email = (String) session.getAttribute("email");
-        log.info("@email===========>{}", email);
         return new ResponseEntity<>(categoryService.getCategoryById(email, categoryId), HttpStatus.OK);
     }
 
@@ -46,7 +59,22 @@ public class CategoryController {
     @PostMapping
     public ResponseEntity<?> addCategory(@RequestBody CreateDto createDto, HttpSession session) throws UserNotFoundException {
         String email = (String) session.getAttribute("email");
-        log.info("@email===========>{}", email);
         return new ResponseEntity<>(categoryService.addCategory(email, createDto), HttpStatus.CREATED);
+    }
+
+    /**
+     * 카테고리 수정
+     * 
+     * @param categoryId
+     * @param updateDto
+     * @param session
+     * @return
+     * @throws UserNotFoundException
+     * @throws ResourceNotFoundException
+     */
+    @PutMapping(path = "/{categoryId}")
+    public ResponseEntity<?> updateCategory(@PathVariable("categoryId") Long categoryId, @RequestBody CategoryReq.UpdateDto updateDto, HttpSession session) throws UserNotFoundException, ResourceNotFoundException {
+        String email = (String) session.getAttribute("email");
+        return new ResponseEntity<>(categoryService.updateCategory(email, categoryId, updateDto), HttpStatus.OK);
     }
 }
