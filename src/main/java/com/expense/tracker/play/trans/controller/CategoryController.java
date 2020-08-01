@@ -2,8 +2,8 @@ package com.expense.tracker.play.trans.controller;
 
 import com.expense.tracker.play.common.exception.ResourceNotFoundException;
 import com.expense.tracker.play.common.exception.UserNotFoundException;
-import com.expense.tracker.play.trans.payload.CategoryReq;
 import com.expense.tracker.play.trans.payload.CategoryReq.CreateDto;
+import com.expense.tracker.play.trans.payload.CategoryReq.UpdateDto;
 import com.expense.tracker.play.trans.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class CategoryController {
     }
 
     /**
-     * 카테코리 단건 조회
+     * 카테고리 단건 조회
      * 
      * @param categoryId
      * @param session
@@ -44,9 +44,9 @@ public class CategoryController {
      * @throws ResourceNotFoundException
      */
     @GetMapping(path = "/{categoryId}")
-    public ResponseEntity<?> getCategoryById(@PathVariable("categoryId") Long categoryId, HttpSession session) throws UserNotFoundException, ResourceNotFoundException {
+    public ResponseEntity<?> getCategory(@PathVariable("categoryId") Long categoryId, HttpSession session) throws UserNotFoundException, ResourceNotFoundException {
         String email = (String) session.getAttribute("email");
-        return new ResponseEntity<>(categoryService.getCategoryById(email, categoryId), HttpStatus.OK);
+        return new ResponseEntity<>(categoryService.getCategory(email, categoryId), HttpStatus.OK);
     }
 
     /**
@@ -73,8 +73,22 @@ public class CategoryController {
      * @throws ResourceNotFoundException
      */
     @PutMapping(path = "/{categoryId}")
-    public ResponseEntity<?> updateCategory(@PathVariable("categoryId") Long categoryId, @RequestBody CategoryReq.UpdateDto updateDto, HttpSession session) throws UserNotFoundException, ResourceNotFoundException {
+    public ResponseEntity<?> updateCategory(@PathVariable("categoryId") Long categoryId, @RequestBody UpdateDto updateDto, HttpSession session) throws UserNotFoundException, ResourceNotFoundException {
         String email = (String) session.getAttribute("email");
         return new ResponseEntity<>(categoryService.updateCategory(email, categoryId, updateDto), HttpStatus.OK);
+    }
+
+    /**
+     * 카테고리 삭제
+     *
+     * @param categoryId
+     * @param session
+     * @return
+     */
+    @DeleteMapping(path = "/{categoryId}")
+    public ResponseEntity<?> deleteCategory(@PathVariable("categoryId") Long categoryId, HttpSession session) throws ResourceNotFoundException, UserNotFoundException {
+        String email = (String) session.getAttribute("email");
+        categoryService.deleteCategory(email, categoryId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

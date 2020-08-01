@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class CategoryService {
 
@@ -48,7 +48,7 @@ public class CategoryService {
      * @throws UserNotFoundException
      * @throws ResourceNotFoundException
      */
-    public FindDto getCategoryById(String email, Long categoryId) throws UserNotFoundException, ResourceNotFoundException {
+    public FindDto getCategory(String email, Long categoryId) throws UserNotFoundException, ResourceNotFoundException {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", email)));
         Category category = categoryRepository.findCategoryByIdAndUser(categoryId, user)
@@ -86,7 +86,6 @@ public class CategoryService {
     public Long updateCategory(String email, Long categoryId, UpdateDto updateDto) throws UserNotFoundException, ResourceNotFoundException {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", email)));
-
         Category category = categoryRepository.findCategoryByIdAndUser(categoryId, user)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
 
@@ -95,12 +94,21 @@ public class CategoryService {
         return category.getId();
     }
 
-//    public void deleteCategoryWithAllTransactions(Integer userId, Integer categoryId) {
-//
-//    }
 
-//    public void deleteCategoryById() {
-//
-//    }
+    /**
+     * 카테고리 삭제
+     *
+     * @param email
+     * @param categoryId
+     * @return
+     */
+    @Transactional
+    public void deleteCategory(String email, Long categoryId) throws UserNotFoundException, ResourceNotFoundException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", email)));
+        Category category = categoryRepository.findCategoryByIdAndUser(categoryId, user)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
 
+        categoryRepository.delete(category);
+    }
 }

@@ -2,6 +2,8 @@ package com.expense.tracker.play.trans.domain;
 
 import com.expense.tracker.play.common.entity.BaseEntity;
 import com.expense.tracker.play.trans.payload.CategoryReq;
+import com.expense.tracker.play.trans.payload.CategoryReq.CreateDto;
+import com.expense.tracker.play.trans.payload.CategoryReq.UpdateDto;
 import com.expense.tracker.play.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -53,9 +55,8 @@ public class Category extends BaseEntity {
             transaction.setCategory(this);
         }
     }
-
     // create category
-    public static Category createCategory(User user, CategoryReq.CreateDto dto) {
+    public static Category createCategory(User user, CreateDto dto) {
         return Category.builder()
                 .user(user)
                 .title(dto.getTitle())
@@ -63,8 +64,9 @@ public class Category extends BaseEntity {
                 .build();
     }
 
+
     // update category
-    public void updateCategory(CategoryReq.UpdateDto dto) {
+    public void updateCategory(UpdateDto dto) {
         this.title = dto.getTitle();
         this.description = dto.getDescription();
     }

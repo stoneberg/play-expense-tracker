@@ -1,14 +1,17 @@
 package com.expense.tracker.play.trans.domain;
 
+import com.expense.tracker.play.trans.payload.CategoryReq;
+import com.expense.tracker.play.trans.payload.TransactionReq;
+import com.expense.tracker.play.trans.payload.TransactionReq.CreateDto;
 import com.expense.tracker.play.common.entity.BaseEntity;
 import com.expense.tracker.play.user.domain.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
+@Builder
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "et_transactions")
@@ -26,7 +29,7 @@ public class Transaction extends BaseEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column(name="amount", columnDefinition="Decimal(10, 2) default '0.00'")
+    @Column(name = "amount", columnDefinition = "Decimal(10, 2) default '0.00'")
     private Double amount;
 
     @Column(length = 50, nullable = false)
@@ -38,6 +41,24 @@ public class Transaction extends BaseEntity {
         if (!category.getTransactions().contains(this)) {
             category.getTransactions().add(this);
         }
+    }
+
+    // create transaction
+    public static Transaction createTransaction(User user, Category category, CreateDto dto) {
+        Transaction transaction = Transaction.builder()
+                .user(user)
+                .amount(dto.getAmount())
+                .note(dto.getNote())
+                .build();
+
+        category.addTransaction(transaction);
+        return transaction;
+    }
+
+    // update transaction
+    public void updateTransaction(TransactionReq.UpdateDto dto) {
+        this.amount = dto.getAmount();
+        this.note = dto.getNote();
     }
 
 }
