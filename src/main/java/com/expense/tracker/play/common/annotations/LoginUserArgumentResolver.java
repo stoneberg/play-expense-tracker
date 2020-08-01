@@ -1,6 +1,6 @@
 package com.expense.tracker.play.common.annotations;
 
-import com.expense.tracker.play.user.domain.UserSession;
+import com.expense.tracker.play.common.filters.UserSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;

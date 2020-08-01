@@ -1,10 +1,7 @@
 package com.expense.tracker.play.common.filters;
 
-import com.expense.tracker.play.common.aop.LogAspect;
-import com.expense.tracker.play.user.domain.UserSession;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

@@ -6,14 +6,12 @@ import com.expense.tracker.play.common.exception.UserNotFoundException;
 import com.expense.tracker.play.trans.payload.TransactionReq.CreateDto;
 import com.expense.tracker.play.trans.payload.TransactionReq.UpdateDto;
 import com.expense.tracker.play.trans.service.TransactionService;
-import com.expense.tracker.play.user.domain.UserSession;
+import com.expense.tracker.play.common.filters.UserSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
 
 @Slf4j
 @RequiredArgsConstructor

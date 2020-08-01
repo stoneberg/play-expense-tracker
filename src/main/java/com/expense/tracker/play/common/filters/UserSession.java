@@ -1,4 +1,4 @@
-package com.expense.tracker.play.user.domain;
+package com.expense.tracker.play.common.filters;
 
 import lombok.Getter;
 

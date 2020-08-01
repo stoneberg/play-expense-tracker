@@ -1,6 +1,6 @@
 package com.expense.tracker.play.common.audit;
 
-import com.expense.tracker.play.user.domain.UserSession;
+import com.expense.tracker.play.common.filters.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
 
