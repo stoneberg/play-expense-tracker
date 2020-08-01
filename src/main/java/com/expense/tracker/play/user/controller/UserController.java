@@ -3,7 +3,8 @@ package com.expense.tracker.play.user.controller;
 
 import com.expense.tracker.play.common.exception.AuthenticationFailedException;
 import com.expense.tracker.play.common.exception.EmailDuplicationException;
-import com.expense.tracker.play.common.exception.UsernameNotFoundException;
+import com.expense.tracker.play.common.exception.BadRequestException;
+import com.expense.tracker.play.common.exception.UserNotFoundException;
 import com.expense.tracker.play.user.payload.UserReq.CreateUserDto;
 import com.expense.tracker.play.user.payload.UserReq.LoginUserDto;
 import com.expense.tracker.play.user.service.UserService;
@@ -44,11 +45,11 @@ public class UserController {
      *
      * @param reqDto
      * @return
-     * @throws UsernameNotFoundException
+     * @throws BadRequestException
      * @throws AuthenticationFailedException
      */
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginUserDto reqDto) throws UsernameNotFoundException, AuthenticationFailedException {
+    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginUserDto reqDto) throws UserNotFoundException, AuthenticationFailedException {
         log.info("@loginUser.userDto=========>{}", reqDto);
         return new ResponseEntity<>(userService.loginUser(reqDto), HttpStatus.OK);
     }

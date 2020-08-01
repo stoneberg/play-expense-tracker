@@ -2,7 +2,7 @@ package com.expense.tracker.play.user.service;
 
 import com.expense.tracker.play.common.exception.AuthenticationFailedException;
 import com.expense.tracker.play.common.exception.EmailDuplicationException;
-import com.expense.tracker.play.common.exception.UsernameNotFoundException;
+import com.expense.tracker.play.common.exception.UserNotFoundException;
 import com.expense.tracker.play.common.utils.JwtTokenUtil;
 import com.expense.tracker.play.user.domain.User;
 import com.expense.tracker.play.user.payload.UserReq.CreateUserDto;
@@ -41,13 +41,13 @@ public class UserService {
      *
      * @param reqDto
      * @return
-     * @throws UsernameNotFoundException
+     * @throws UserNotFoundException
      * @throws AuthenticationFailedException
      */
-    public Map<String, Object> loginUser(LoginUserDto reqDto) throws UsernameNotFoundException, AuthenticationFailedException {
+    public Map<String, Object> loginUser(LoginUserDto reqDto) throws UserNotFoundException, AuthenticationFailedException {
         // check user exists
         User user = userRepository.findByEmail(reqDto.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException(String.format("User [%s] not exists", reqDto.getEmail())));
+                .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", reqDto.getEmail())));
         // check password correct
         boolean passwordMatch = BCrypt.checkpw(reqDto.getPassword(), user.getPassword());
         if (!passwordMatch) {

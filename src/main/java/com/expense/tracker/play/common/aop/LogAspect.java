@@ -46,7 +46,6 @@ public class LogAspect {
     /**
      * print controller, service method params in json format
      * 
-     * @param method
      * @param pjp, arg
      * @throws JsonProcessingException
      */

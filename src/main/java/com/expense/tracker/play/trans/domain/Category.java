@@ -1,8 +1,10 @@
 package com.expense.tracker.play.trans.domain;
 
 import com.expense.tracker.play.common.entity.BaseEntity;
+import com.expense.tracker.play.trans.payload.CategoryReq;
 import com.expense.tracker.play.user.domain.User;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,7 +36,15 @@ public class Category extends BaseEntity {
     private String description;
 
     @Column(name="total_expense", columnDefinition="Decimal(10, 2) default '0.00'")
-    private Double totalExpense;
+    private Double totalExpense = 0.00;
+
+
+    @Builder
+    public Category(User user, String title, String description) {
+        this.user = user;
+        this.title = title;
+        this.description = description;
+    }
 
     // utility method
     public void addTransaction(Transaction transaction) {
@@ -42,6 +52,15 @@ public class Category extends BaseEntity {
         if (transaction.getCategory() != this) {
             transaction.setCategory(this);
         }
+    }
+
+    // create category
+    public static Category createCategory(User user, CategoryReq.CreateDto dto) {
+        return Category.builder()
+                .user(user)
+                .title(dto.getTitle())
+                .description(dto.getDescription())
+                .build();
     }
 
 }

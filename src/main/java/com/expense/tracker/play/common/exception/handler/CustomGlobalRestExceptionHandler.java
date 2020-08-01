@@ -36,12 +36,6 @@ public class CustomGlobalRestExceptionHandler {
         return buildError(ErrorCode.USER_NOT_FOUND, ex.getMessage(), request);
     }
     
-//    @ExceptionHandler(UsernameNotFoundException.class)
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
-//    public ErrorResponse handleUsernameNotFoundException(UsernameNotFoundException ex, WebRequest request) {
-//        return buildError(ErrorCode.USER_NOT_FOUND, ex.getMessage(), request);
-//    }
-
     // 404
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -69,6 +63,13 @@ public class CustomGlobalRestExceptionHandler {
     protected ErrorResponse handlerAuthenticationFailedException(AuthenticationFailedException ex, WebRequest request) {
         return buildError(ErrorCode.AUTHENTICATION_FAILED, request);
     }
+
+    //    @ExceptionHandler(PasswordFailedExceededException.class)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    protected ErrorResponse handlePasswordFailedExceededException(PasswordFailedExceededException ex, WebRequest request) {
+//        log.error(ex.getMessage());
+//        return buildError(ex.getErrorCode(), request);
+//    }
 
     // Method not support
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -108,14 +109,6 @@ public class CustomGlobalRestExceptionHandler {
         return buildError(ErrorCode.INPUT_VALUE_INVALID, request);
     }
 
-
-//    @ExceptionHandler(PasswordFailedExceededException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    protected ErrorResponse handlePasswordFailedExceededException(PasswordFailedExceededException ex, WebRequest request) {
-//        log.error(ex.getMessage());
-//        return buildError(ex.getErrorCode(), request);
-//    }
-    
     // HttpRequestMethodNotSupportedException(405)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
