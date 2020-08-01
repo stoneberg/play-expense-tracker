@@ -2,8 +2,6 @@ package com.expense.tracker.play.trans.controller;
 
 import com.expense.tracker.play.common.exception.ResourceNotFoundException;
 import com.expense.tracker.play.common.exception.UserNotFoundException;
-import com.expense.tracker.play.trans.payload.CategoryReq;
-import com.expense.tracker.play.trans.payload.TransactionReq;
 import com.expense.tracker.play.trans.payload.TransactionReq.CreateDto;
 import com.expense.tracker.play.trans.payload.TransactionReq.UpdateDto;
 import com.expense.tracker.play.trans.service.TransactionService;

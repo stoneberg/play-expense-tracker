@@ -6,6 +6,7 @@ import com.expense.tracker.play.trans.domain.Category;
 import com.expense.tracker.play.trans.payload.CategoryReq;
 import com.expense.tracker.play.trans.payload.CategoryReq.UpdateDto;
 import com.expense.tracker.play.trans.payload.CategoryRes.FindDto;
+import com.expense.tracker.play.trans.repository.CategoryQuerydslRepository;
 import com.expense.tracker.play.trans.repository.CategoryRepository;
 import com.expense.tracker.play.user.domain.User;
 import com.expense.tracker.play.user.repository.UserRepository;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final CategoryQuerydslRepository categoryQuerydslRepository;
     private final UserRepository userRepository;
 
     /**
@@ -33,9 +35,9 @@ public class CategoryService {
      * @throws UserNotFoundException
      */
     public List<FindDto> findAllCategories(String email) throws UserNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", email)));
-        List<Category> categories = categoryRepository.findAllByUser(user);
+//        User user = userRepository.findByEmail(email)
+//                .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", email)));
+        List<Category> categories = categoryRepository.findAllByUserEmail(email);
         return categories.stream().map(FindDto::new).collect(Collectors.toList());
     }
 
@@ -48,12 +50,31 @@ public class CategoryService {
      * @throws UserNotFoundException
      * @throws ResourceNotFoundException
      */
-    public FindDto getCategory(String email, Long categoryId) throws UserNotFoundException, ResourceNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", email)));
-        Category category = categoryRepository.findCategoryByIdAndUser(categoryId, user)
+    public FindDto getCategory(String email, Long categoryId) throws ResourceNotFoundException {
+        Category category = categoryRepository.findCategoryByIdAndUserEmail(categoryId, email)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
         return FindDto.toDto(category);
+    }
+
+    /**
+     * 카테고리 목록 조회 By QueryDSL
+     *
+     * @param email
+     * @return
+     */
+    public List<FindDto> findAllCategoriesByDsl(String email) {
+        return categoryQuerydslRepository.selectCategories(email);
+    }
+
+    /**
+     * 카테고리 단건 조회 By QueryDSL
+     *
+     * @param email
+     * @param categoryId
+     * @return
+     */
+    public FindDto getCategoryByDsl(String email, Long categoryId) {
+        return categoryQuerydslRepository.selectCategory(email, categoryId);
     }
 
     /**
@@ -83,10 +104,8 @@ public class CategoryService {
      * @throws ResourceNotFoundException
      */
     @Transactional
-    public Long updateCategory(String email, Long categoryId, UpdateDto updateDto) throws UserNotFoundException, ResourceNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", email)));
-        Category category = categoryRepository.findCategoryByIdAndUser(categoryId, user)
+    public Long updateCategory(String email, Long categoryId, UpdateDto updateDto) throws ResourceNotFoundException {
+        Category category = categoryRepository.findCategoryByIdAndUserEmail(categoryId, email)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
 
         // update by dirty checking
@@ -103,10 +122,8 @@ public class CategoryService {
      * @return
      */
     @Transactional
-    public void deleteCategory(String email, Long categoryId) throws UserNotFoundException, ResourceNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", email)));
-        Category category = categoryRepository.findCategoryByIdAndUser(categoryId, user)
+    public void deleteCategory(String email, Long categoryId) throws ResourceNotFoundException {
+        Category category = categoryRepository.findCategoryByIdAndUserEmail(categoryId, email)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
 
         categoryRepository.delete(category);

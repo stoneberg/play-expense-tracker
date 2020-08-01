@@ -34,7 +34,7 @@
             <appender-ref ref="STDOUT" />
         </logger>
 
-        <logger name="org.springframework.core" level="ERROR" additivity="false">
+        <logger name="org.springframework.core" level="DEBUG" additivity="false">
             <appender-ref ref="STDOUT" />
         </logger>
 

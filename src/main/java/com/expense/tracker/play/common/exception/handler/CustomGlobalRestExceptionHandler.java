@@ -121,6 +121,7 @@ public class CustomGlobalRestExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected ErrorResponse handleAnyException(Exception ex, WebRequest request) {
         log.error("@Exception::{}", ExceptionUtils.getMessage(ex));
+        ex.printStackTrace();
         return buildError(ErrorCode.UNKNOWN_EXCEPTION, request);
     }
 

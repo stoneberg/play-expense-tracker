@@ -23,7 +23,7 @@ public class CategoryController {
 
     /**
      * 카테고리 목록 조회
-     * 
+     *
      * @param session
      * @return
      * @throws UserNotFoundException
@@ -44,10 +44,38 @@ public class CategoryController {
      * @throws ResourceNotFoundException
      */
     @GetMapping(path = "/{categoryId}")
-    public ResponseEntity<?> getCategory(@PathVariable("categoryId") Long categoryId, HttpSession session) throws UserNotFoundException, ResourceNotFoundException {
+    public ResponseEntity<?> getCategory(@PathVariable("categoryId") Long categoryId, HttpSession session) throws ResourceNotFoundException {
         String email = (String) session.getAttribute("email");
         return new ResponseEntity<>(categoryService.getCategory(email, categoryId), HttpStatus.OK);
     }
+
+    /**
+     * 카테고리 목록 조회 by QueryDSL
+     *
+     * @param session
+     * @return
+     * @throws UserNotFoundException
+     */
+//    @GetMapping
+//    public ResponseEntity<?> getAllCategories(HttpSession session) {
+//        String email = (String) session.getAttribute("email");
+//        return new ResponseEntity<>(categoryService.findAllCategoriesByDsl(email), HttpStatus.OK);
+//    }
+
+    /**
+     * 카테고리 단건 조회 by QueryDSL
+     *
+     * @param categoryId
+     * @param session
+     * @return
+     * @throws UserNotFoundException
+     * @throws ResourceNotFoundException
+     */
+//    @GetMapping(path = "/{categoryId}")
+//    public ResponseEntity<?> getCategoryByDsl(@PathVariable("categoryId") Long categoryId, HttpSession session) {
+//        String email = (String) session.getAttribute("email");
+//        return new ResponseEntity<>(categoryService.getCategoryByDsl(email, categoryId), HttpStatus.OK);
+//    }
 
     /**
      * 카테고리 생성
@@ -73,7 +101,7 @@ public class CategoryController {
      * @throws ResourceNotFoundException
      */
     @PutMapping(path = "/{categoryId}")
-    public ResponseEntity<?> updateCategory(@PathVariable("categoryId") Long categoryId, @RequestBody UpdateDto updateDto, HttpSession session) throws UserNotFoundException, ResourceNotFoundException {
+    public ResponseEntity<?> updateCategory(@PathVariable("categoryId") Long categoryId, @RequestBody UpdateDto updateDto, HttpSession session) throws ResourceNotFoundException {
         String email = (String) session.getAttribute("email");
         return new ResponseEntity<>(categoryService.updateCategory(email, categoryId, updateDto), HttpStatus.OK);
     }
@@ -86,7 +114,7 @@ public class CategoryController {
      * @return
      */
     @DeleteMapping(path = "/{categoryId}")
-    public ResponseEntity<?> deleteCategory(@PathVariable("categoryId") Long categoryId, HttpSession session) throws ResourceNotFoundException, UserNotFoundException {
+    public ResponseEntity<?> deleteCategory(@PathVariable("categoryId") Long categoryId, HttpSession session) throws ResourceNotFoundException {
         String email = (String) session.getAttribute("email");
         categoryService.deleteCategory(email, categoryId);
         return new ResponseEntity<>(HttpStatus.OK);

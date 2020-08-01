@@ -1,7 +1,6 @@
 package com.expense.tracker.play.trans.domain;
 
 import com.expense.tracker.play.common.entity.BaseEntity;
-import com.expense.tracker.play.trans.payload.CategoryReq;
 import com.expense.tracker.play.trans.payload.CategoryReq.CreateDto;
 import com.expense.tracker.play.trans.payload.CategoryReq.UpdateDto;
 import com.expense.tracker.play.user.domain.User;
@@ -37,7 +36,7 @@ public class Category extends BaseEntity {
     @Column(length = 50, nullable = false)
     private String description;
 
-    @Column(name="total_expense", columnDefinition="Decimal(10, 2) default '0.00'")
+    @Column(columnDefinition="Decimal(10, 2) default '0.00'")
     private Double totalExpense = 0.00;
 
 
@@ -69,6 +68,11 @@ public class Category extends BaseEntity {
     public void updateCategory(UpdateDto dto) {
         this.title = dto.getTitle();
         this.description = dto.getDescription();
+    }
+
+    // update totalExpense
+    public void updateTotalExpense(Double totalExpense) {
+        this.totalExpense = totalExpense;
     }
 
 }

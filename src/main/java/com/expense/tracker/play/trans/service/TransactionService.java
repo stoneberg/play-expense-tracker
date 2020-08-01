@@ -4,7 +4,6 @@ import com.expense.tracker.play.common.exception.ResourceNotFoundException;
 import com.expense.tracker.play.common.exception.UserNotFoundException;
 import com.expense.tracker.play.trans.domain.Category;
 import com.expense.tracker.play.trans.domain.Transaction;
-import com.expense.tracker.play.trans.payload.TransactionReq;
 import com.expense.tracker.play.trans.payload.TransactionReq.CreateDto;
 import com.expense.tracker.play.trans.payload.TransactionReq.UpdateDto;
 import com.expense.tracker.play.trans.payload.TransactionRes;
@@ -37,13 +36,10 @@ public class TransactionService {
      * @param email
      * @param categoryId
      * @return
-     * @throws UserNotFoundException
      * @throws ResourceNotFoundException
      */
-    public List<FindDto> getAllTransactions(String email, Long categoryId) throws UserNotFoundException, ResourceNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", email)));
-        Category category = categoryRepository.findCategoryByIdAndUser(categoryId, user)
+    public List<FindDto> getAllTransactions(String email, Long categoryId) throws ResourceNotFoundException {
+        Category category = categoryRepository.findCategoryByIdAndUserEmail(categoryId, email)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
 
         List<Transaction> transactions = transactionRepository.findByCategory(category);
@@ -57,13 +53,10 @@ public class TransactionService {
      * @param categoryId
      * @param transactionId
      * @return
-     * @throws UserNotFoundException
      * @throws ResourceNotFoundException
      */
-    public FindDto getTransaction(String email, Long categoryId, Long transactionId) throws UserNotFoundException, ResourceNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", email)));
-        Category category = categoryRepository.findCategoryByIdAndUser(categoryId, user)
+    public FindDto getTransaction(String email, Long categoryId, Long transactionId) throws ResourceNotFoundException {
+        Category category = categoryRepository.findCategoryByIdAndUserEmail(categoryId, email)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
         Transaction transaction = transactionRepository.findByIdAndCategory(transactionId, category)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", transactionId)));
@@ -85,11 +78,15 @@ public class TransactionService {
     public Long addTransaction(String email, Long categoryId, CreateDto createDto) throws UserNotFoundException, ResourceNotFoundException {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", email)));
-        Category category = categoryRepository.findCategoryByIdAndUser(categoryId, user)
+        Category category = categoryRepository.findCategoryByIdAndUserEmail(categoryId, email)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
 
         Transaction transaction = Transaction.createTransaction(user, category, createDto);
         transactionRepository.save(transaction);
+
+        // update total_expense
+        Double totalExpense = transactionRepository.selectTotalExpense(categoryId);
+        category.updateTotalExpense(totalExpense);
 
         return transaction.getId();
     }
@@ -102,14 +99,11 @@ public class TransactionService {
      * @param transactionId
      * @param updateDto
      * @return
-     * @throws UserNotFoundException
      * @throws ResourceNotFoundException
      */
     @Transactional
-    public Long updateTransaction(String email, Long categoryId, Long transactionId, UpdateDto updateDto) throws UserNotFoundException, ResourceNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", email)));
-        Category category = categoryRepository.findCategoryByIdAndUser(categoryId, user)
+    public Long updateTransaction(String email, Long categoryId, Long transactionId, UpdateDto updateDto) throws ResourceNotFoundException {
+        Category category = categoryRepository.findCategoryByIdAndUserEmail(categoryId, email)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
         Transaction transaction = transactionRepository.findByIdAndCategory(transactionId, category)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", transactionId)));
@@ -125,14 +119,11 @@ public class TransactionService {
      * @param email
      * @param categoryId
      * @param transactionId
-     * @throws UserNotFoundException
      * @throws ResourceNotFoundException
      */
     @Transactional
-    public void deleteTransaction(String email, Long categoryId, Long transactionId) throws UserNotFoundException, ResourceNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", email)));
-        Category category = categoryRepository.findCategoryByIdAndUser(categoryId, user)
+    public void deleteTransaction(String email, Long categoryId, Long transactionId) throws ResourceNotFoundException {
+        Category category = categoryRepository.findCategoryByIdAndUserEmail(categoryId, email)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
         Transaction transaction = transactionRepository.findByIdAndCategory(transactionId, category)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", transactionId)));
