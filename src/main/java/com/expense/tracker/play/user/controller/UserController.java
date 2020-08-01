@@ -3,9 +3,9 @@ package com.expense.tracker.play.user.controller;
 
 import com.expense.tracker.play.common.exception.AuthenticationFailedException;
 import com.expense.tracker.play.common.exception.EmailDuplicationException;
-import com.expense.tracker.play.common.exception.UserNotFoundException;
 import com.expense.tracker.play.common.exception.UsernameNotFoundException;
-import com.expense.tracker.play.user.payload.UserReq;
+import com.expense.tracker.play.user.payload.UserReq.CreateUserDto;
+import com.expense.tracker.play.user.payload.UserReq.LoginUserDto;
 import com.expense.tracker.play.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,14 +26,29 @@ public class UserController {
 
     private final UserService userService;
 
+    /**
+     * 가입
+     *
+     * @param reqDto
+     * @return
+     * @throws EmailDuplicationException
+     */
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserReq.CreateUserDto reqDto) throws EmailDuplicationException {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody CreateUserDto reqDto) throws EmailDuplicationException {
         log.info("@registerUser.userDto=========>{}", reqDto);
         return new ResponseEntity<>(userService.registerUser(reqDto), HttpStatus.CREATED);
     }
 
+    /**
+     * 로그인
+     *
+     * @param reqDto
+     * @return
+     * @throws UsernameNotFoundException
+     * @throws AuthenticationFailedException
+     */
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@Valid @RequestBody UserReq.LoginUserDto reqDto) throws UsernameNotFoundException, AuthenticationFailedException {
+    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginUserDto reqDto) throws UsernameNotFoundException, AuthenticationFailedException {
         log.info("@loginUser.userDto=========>{}", reqDto);
         return new ResponseEntity<>(userService.loginUser(reqDto), HttpStatus.OK);
     }

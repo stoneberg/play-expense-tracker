@@ -16,7 +16,7 @@ public class JwtTokenUtil {
     @Value("${app.jwt.secret-key}")
     private String secretKey;
 
-    // 2 X 60 X 60 X 1000 => 2시간
+    // [7,200,000] 2 X 60 X 60 X 1000 => 2시간
     @Value("${app.jwt.token-validity}")
     private Long tokenValidity;
 

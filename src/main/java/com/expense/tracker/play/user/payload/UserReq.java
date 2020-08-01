@@ -13,18 +13,18 @@ public class UserReq {
     public static class CreateUserDto {
 
         @Size(min = 2, max = 20)
-        @NotBlank(message = "fristName is mandatory field. please provide fristName")
+        @NotBlank(message = "FirstName is mandatory field. please provide firstName")
         private String firstName;
 
         @Size(min = 2, max = 20)
-        @NotBlank(message = "lastName is mandatory field. please provide lastName")
+        @NotBlank(message = "LastName is mandatory field. please provide lastName")
         private String lastName;
 
         @Size(min = 10, max = 30)
-        @Email(message = "email is mandatory field. please provide valid email")
+        @Email(message = "Email is mandatory field. please provide a valid email")
         private String email;
 
-        @NotBlank(message = "username is mandatory field. please provide username")
+        @NotBlank(message = "Password is mandatory field. please provide password")
         private String password;
 
         public User toEntity() {
@@ -41,10 +41,10 @@ public class UserReq {
     @Data
     public static class LoginUserDto {
         @Size(min = 10, max = 30)
-        @Email(message = "email is mandatory field. please provide valid email")
+        @Email(message = "Email is mandatory field. please provide valid email")
         private String email;
 
-        @NotBlank(message = "username is mandatory field. please provide username")
+        @NotBlank(message = "Password is mandatory field. please provide password")
         private String password;
 
     }

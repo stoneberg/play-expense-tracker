@@ -23,9 +23,9 @@ public class ErrorResponse {
 	private List<FieldError> errors = new ArrayList<>();
 
 	@Builder
-	public ErrorResponse(LocalDateTime timestamp, Boolean isSuccess, String message, String code, int status, String path, List<FieldError> errors) {
+	public ErrorResponse(LocalDateTime timestamp, Boolean success, String message, String code, int status, String path, List<FieldError> errors) {
 		this.timestamp = timestamp;
-		this.success = isSuccess;
+		this.success = success;
 		this.message = message;
 		this.code = code;
 		this.status = status;

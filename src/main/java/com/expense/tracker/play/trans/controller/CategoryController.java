@@ -1,6 +1,7 @@
 package com.expense.tracker.play.trans.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ public class CategoryController {
     public String getAllCategories() {
         HttpSession httpSession = request.getSession(false);
         String email = (String) httpSession.getAttribute("email");
-        return email;
+        String username = (String) httpSession.getAttribute("username");
+        return username + StringUtils.SPACE + email;
     }
 }

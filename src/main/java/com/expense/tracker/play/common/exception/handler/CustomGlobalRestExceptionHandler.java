@@ -131,9 +131,42 @@ public class CustomGlobalRestExceptionHandler {
         return buildError(ErrorCode.UNKNOWN_EXCEPTION, request);
     }
 
+    private ErrorResponse buildError(ErrorCode errorCode, WebRequest request) {
+        return ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .success(Boolean.FALSE)
+                .code(errorCode.getCode())
+                .status(errorCode.getStatus())
+                .path(request.getDescription(false))
+                .message(errorCode.getMessage())
+                .build();
+    }
+    
+    private ErrorResponse buildError(ErrorCode errorCode, String message, WebRequest request) {
+        return ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .success(Boolean.FALSE)
+                .code(errorCode.getCode())
+                .status(errorCode.getStatus())
+                .path(request.getDescription(false))
+                .message(message)
+                .build();
+    }
+
+    private ErrorResponse buildFieldErrors(ErrorCode errorCode, WebRequest request, List<ErrorResponse.FieldError> errors) {
+        return ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .success(Boolean.FALSE)
+                .code(errorCode.getCode())
+                .status(errorCode.getStatus())
+                .path(request.getDescription(false))
+                .message(errorCode.getMessage())
+                .errors(errors)
+                .build();
+    }
 
     /**
-     * find HttpRequestMethodNotSupportedException message
+     * find MethodArgumentNotValidException message
      * @param bindingResult
      * @return
      */
@@ -148,42 +181,6 @@ public class CustomGlobalRestExceptionHandler {
                 .collect(Collectors.toList());
     }
 
-
-    private ErrorResponse buildError(ErrorCode errorCode, WebRequest request) {
-        return ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .isSuccess(Boolean.FALSE)
-                .code(errorCode.getCode())
-                .status(errorCode.getStatus())
-                .path(request.getDescription(false))
-                .message(errorCode.getMessage())
-                .build();
-    }
-    
-    private ErrorResponse buildError(ErrorCode errorCode, String message, WebRequest request) {
-        return ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .isSuccess(Boolean.FALSE)
-                .code(errorCode.getCode())
-                .status(errorCode.getStatus())
-                .path(request.getDescription(false))
-                .message(message)
-                .build();
-    }
-
-    private ErrorResponse buildFieldErrors(ErrorCode errorCode, WebRequest request, List<ErrorResponse.FieldError> errors) {
-        return ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .isSuccess(Boolean.FALSE)
-                .code(errorCode.getCode())
-                .status(errorCode.getStatus())
-                .path(request.getDescription(false))
-                .message(errorCode.getMessage())
-                .errors(errors)
-                .build();
-    }
-    
-    
     /**
      * find ConstraintViolationException message
      * @param violationIterator
@@ -195,7 +192,7 @@ public class CustomGlobalRestExceptionHandler {
             final ConstraintViolation<?> constraintViolation = violationIterator.next();
             resultMessageBuilder
                 .append("['")
-                .append(getPopertyName(constraintViolation.getPropertyPath().toString())) // 유효성 검사가 실패한 속성
+                .append(getPropertyName(constraintViolation.getPropertyPath().toString())) // 유효성 검사가 실패한 속성
                 .append("' is '")
                 .append(constraintViolation.getInvalidValue()) // 유효하지 않은 값
                 .append("'. ")
@@ -210,7 +207,7 @@ public class CustomGlobalRestExceptionHandler {
         return resultMessageBuilder.toString();
     }
 
-    protected String getPopertyName(String propertyPath) {
+    protected String getPropertyName(String propertyPath) {
         return propertyPath.substring(propertyPath.lastIndexOf('.') + 1); // 전체 속성 경로에서 속성 이름만 가져온다.
     }    
     

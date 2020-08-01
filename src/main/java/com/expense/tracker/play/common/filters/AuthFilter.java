@@ -3,6 +3,7 @@ package com.expense.tracker.play.common.filters;
 import com.expense.tracker.play.common.aop.LogAspect;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +34,7 @@ public class AuthFilter extends GenericFilterBean {
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         String authHeader = httpRequest.getHeader("Authorization");
         log.info("@authHeader===================>{}", authHeader);
-        log.info("@secretKey====================>{}", secretKey);
+        // log.info("@secretKey====================>{}", secretKey);
 
         if (authHeader != null) {
             String[] authHeaderArr = authHeader.split("Bearer ");
@@ -47,12 +48,12 @@ public class AuthFilter extends GenericFilterBean {
                     // 세션을 가져온다. (가져올 세션이 없다면 생성한다.)
                     HttpSession httpSession = httpRequest.getSession(true);
 
-                    // "USER"로 sessionVO를 세션에 바인딩한다.
+                    // session에 User attribute를 바인딩한다.
                     httpSession.setAttribute("email", claims.get("email"));
-                    //httpRequest.setAttribute("email", claims.get("email"));
+                    httpSession.setAttribute("username", claims.get("firstName") + StringUtils.SPACE + claims.get("lastName"));
 
                 } catch (Exception e) {
-                    httpResponse.sendError(HttpStatus.FORBIDDEN.value(), "invalid/expired token");
+                    httpResponse.sendError(HttpStatus.FORBIDDEN.value(), "Invalid or Expired token");
                     return;
                 }
             } else {
