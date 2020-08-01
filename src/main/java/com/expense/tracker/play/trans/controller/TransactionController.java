@@ -1,10 +1,12 @@
 package com.expense.tracker.play.trans.controller;
 
+import com.expense.tracker.play.common.annotations.LoginUser;
 import com.expense.tracker.play.common.exception.ResourceNotFoundException;
 import com.expense.tracker.play.common.exception.UserNotFoundException;
 import com.expense.tracker.play.trans.payload.TransactionReq.CreateDto;
 import com.expense.tracker.play.trans.payload.TransactionReq.UpdateDto;
 import com.expense.tracker.play.trans.service.TransactionService;
+import com.expense.tracker.play.user.domain.UserSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,14 +28,13 @@ public class TransactionController {
      * 트랜잭션 목록 조회
      *
      * @param categoryId
-     * @param session
+     * @param user
      * @return
      * @throws UserNotFoundException
      */
     @GetMapping
-    public ResponseEntity<?> getAllTransactions(@PathVariable("categoryId") Long categoryId, HttpSession session) throws UserNotFoundException, ResourceNotFoundException {
-        String email = (String) session.getAttribute("email");
-        return new ResponseEntity<>(transactionService.getAllTransactions(email, categoryId), HttpStatus.OK);
+    public ResponseEntity<?> getAllTransactions(@PathVariable("categoryId") Long categoryId, @LoginUser UserSession user) throws UserNotFoundException, ResourceNotFoundException {
+        return new ResponseEntity<>(transactionService.getAllTransactions(user.getEmail(), categoryId), HttpStatus.OK);
     }
 
     /**
@@ -41,15 +42,14 @@ public class TransactionController {
      *
      * @param categoryId
      * @param transactionId
-     * @param session
+     * @param user
      * @return
      * @throws UserNotFoundException
      * @throws ResourceNotFoundException
      */
     @GetMapping(path = "/{transactionId}")
-    public ResponseEntity<?> getTransaction(@PathVariable("categoryId") Long categoryId, @PathVariable("transactionId") Long transactionId, HttpSession session) throws UserNotFoundException, ResourceNotFoundException {
-        String email = (String) session.getAttribute("email");
-        return new ResponseEntity<>(transactionService.getTransaction(email, categoryId, transactionId), HttpStatus.OK);
+    public ResponseEntity<?> getTransaction(@PathVariable("categoryId") Long categoryId, @PathVariable("transactionId") Long transactionId, @LoginUser UserSession user) throws UserNotFoundException, ResourceNotFoundException {
+        return new ResponseEntity<>(transactionService.getTransaction(user.getEmail(), categoryId, transactionId), HttpStatus.OK);
     }
 
 
@@ -58,15 +58,14 @@ public class TransactionController {
      * 
      * @param categoryId
      * @param createDto
-     * @param session
+     * @param user
      * @return
      * @throws ResourceNotFoundException
      * @throws UserNotFoundException
      */
     @PostMapping
-    public ResponseEntity<?> addTransaction(@PathVariable Long categoryId, @RequestBody CreateDto createDto, HttpSession session) throws ResourceNotFoundException, UserNotFoundException {
-        String email = (String) session.getAttribute("email");
-        return new ResponseEntity<>(transactionService.addTransaction(email, categoryId, createDto), HttpStatus.CREATED);
+    public ResponseEntity<?> addTransaction(@PathVariable Long categoryId, @RequestBody CreateDto createDto, @LoginUser UserSession user) throws ResourceNotFoundException, UserNotFoundException {
+        return new ResponseEntity<>(transactionService.addTransaction(user.getEmail(), categoryId, createDto), HttpStatus.CREATED);
     }
 
     /**
@@ -75,15 +74,14 @@ public class TransactionController {
      * @param categoryId
      * @param transactionId
      * @param updateDto
-     * @param session
+     * @param user
      * @return
      * @throws UserNotFoundException
      * @throws ResourceNotFoundException
      */
     @PutMapping(path = "/{transactionId}")
-    public ResponseEntity<?> updateTransaction(@PathVariable("categoryId") Long categoryId, @PathVariable("transactionId") Long transactionId, @RequestBody UpdateDto updateDto, HttpSession session) throws UserNotFoundException, ResourceNotFoundException {
-        String email = (String) session.getAttribute("email");
-        return new ResponseEntity<>(transactionService.updateTransaction(email, categoryId, transactionId, updateDto), HttpStatus.OK);
+    public ResponseEntity<?> updateTransaction(@PathVariable("categoryId") Long categoryId, @PathVariable("transactionId") Long transactionId, @RequestBody UpdateDto updateDto, @LoginUser UserSession user) throws UserNotFoundException, ResourceNotFoundException {
+        return new ResponseEntity<>(transactionService.updateTransaction(user.getEmail(), categoryId, transactionId, updateDto), HttpStatus.OK);
     }
 
     /**
@@ -91,13 +89,12 @@ public class TransactionController {
      *
      * @param categoryId
      * @param transactionId
-     * @param session
+     * @param user
      * @return
      */
     @DeleteMapping(path = "/{transactionId}")
-    public ResponseEntity<?> deleteTransaction(@PathVariable("categoryId") Long categoryId, @PathVariable("transactionId") Long transactionId, HttpSession session) throws ResourceNotFoundException, UserNotFoundException {
-        String email = (String) session.getAttribute("email");
-        transactionService.deleteTransaction(email, categoryId, transactionId);
+    public ResponseEntity<?> deleteTransaction(@PathVariable("categoryId") Long categoryId, @PathVariable("transactionId") Long transactionId, @LoginUser UserSession user) throws ResourceNotFoundException, UserNotFoundException {
+        transactionService.deleteTransaction(user.getEmail(), categoryId, transactionId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

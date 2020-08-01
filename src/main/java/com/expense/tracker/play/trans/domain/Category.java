@@ -1,6 +1,6 @@
 package com.expense.tracker.play.trans.domain;
 
-import com.expense.tracker.play.common.entity.BaseEntity;
+import com.expense.tracker.play.common.audit.AuditorBaseEntity;
 import com.expense.tracker.play.trans.payload.CategoryReq.CreateDto;
 import com.expense.tracker.play.trans.payload.CategoryReq.UpdateDto;
 import com.expense.tracker.play.user.domain.User;
@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "et_categories")
-public class Category extends BaseEntity {
+public class Category extends AuditorBaseEntity<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

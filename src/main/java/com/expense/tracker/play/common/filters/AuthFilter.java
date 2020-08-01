@@ -1,6 +1,7 @@
 package com.expense.tracker.play.common.filters;
 
 import com.expense.tracker.play.common.aop.LogAspect;
+import com.expense.tracker.play.user.domain.UserSession;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.apache.commons.lang3.StringUtils;
@@ -49,8 +50,7 @@ public class AuthFilter extends GenericFilterBean {
                     HttpSession httpSession = httpRequest.getSession(true);
 
                     // session에 User attribute를 바인딩한다.
-                    httpSession.setAttribute("email", claims.get("email"));
-                    httpSession.setAttribute("username", claims.get("firstName") + StringUtils.SPACE + claims.get("lastName"));
+                    httpSession.setAttribute("user", new UserSession(claims.get("email").toString()));
 
                 } catch (Exception e) {
                     httpResponse.sendError(HttpStatus.FORBIDDEN.value(), "Invalid or Expired token");

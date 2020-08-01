@@ -1,6 +1,6 @@
 package com.expense.tracker.play.user.domain;
 
-import com.expense.tracker.play.common.entity.BaseEntity;
+import com.expense.tracker.play.common.audit.AuditorBaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "et_users")
-public class User extends BaseEntity {
+public class User extends AuditorBaseEntity<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

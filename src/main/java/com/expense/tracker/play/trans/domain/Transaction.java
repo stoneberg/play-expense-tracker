@@ -1,9 +1,8 @@
 package com.expense.tracker.play.trans.domain;
 
-import com.expense.tracker.play.trans.payload.CategoryReq;
+import com.expense.tracker.play.common.audit.AuditorBaseEntity;
 import com.expense.tracker.play.trans.payload.TransactionReq;
 import com.expense.tracker.play.trans.payload.TransactionReq.CreateDto;
-import com.expense.tracker.play.common.entity.BaseEntity;
 import com.expense.tracker.play.user.domain.User;
 import lombok.*;
 
@@ -15,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "et_transactions")
-public class Transaction extends BaseEntity {
+public class Transaction extends AuditorBaseEntity<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
