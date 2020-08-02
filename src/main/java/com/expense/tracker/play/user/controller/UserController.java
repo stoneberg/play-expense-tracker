@@ -2,11 +2,12 @@ package com.expense.tracker.play.user.controller;
 
 
 import com.expense.tracker.play.common.exception.AuthenticationFailedException;
-import com.expense.tracker.play.common.exception.EmailDuplicationException;
 import com.expense.tracker.play.common.exception.BadRequestException;
+import com.expense.tracker.play.common.exception.EmailDuplicationException;
 import com.expense.tracker.play.common.exception.UserNotFoundException;
-import com.expense.tracker.play.user.payload.UserReq.CreateUserDto;
-import com.expense.tracker.play.user.payload.UserReq.LoginUserDto;
+import com.expense.tracker.play.user.payload.UserReq;
+import com.expense.tracker.play.user.payload.UserReq.CreateDto;
+import com.expense.tracker.play.user.payload.UserReq.LoginDto;
 import com.expense.tracker.play.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,28 +31,26 @@ public class UserController {
     /**
      * 가입
      *
-     * @param reqDto
+     * @param createDto
      * @return
      * @throws EmailDuplicationException
      */
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody CreateUserDto reqDto) throws EmailDuplicationException {
-        log.info("@registerUser.userDto=========>{}", reqDto);
-        return new ResponseEntity<>(userService.registerUser(reqDto), HttpStatus.CREATED);
+    public ResponseEntity<?> registerUser(@Valid @RequestBody CreateDto createDto) throws EmailDuplicationException {
+        return new ResponseEntity<>(userService.registerUser(createDto), HttpStatus.CREATED);
     }
 
     /**
      * 로그인
      *
-     * @param reqDto
+     * @param loginDto
      * @return
      * @throws BadRequestException
      * @throws AuthenticationFailedException
      */
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginUserDto reqDto) throws UserNotFoundException, AuthenticationFailedException {
-        log.info("@loginUser.userDto=========>{}", reqDto);
-        return new ResponseEntity<>(userService.loginUser(reqDto), HttpStatus.OK);
+    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginDto loginDto) throws UserNotFoundException, AuthenticationFailedException {
+        return new ResponseEntity<>(userService.loginUser(loginDto), HttpStatus.OK);
     }
 
 }

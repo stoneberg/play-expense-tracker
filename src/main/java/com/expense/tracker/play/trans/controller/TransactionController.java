@@ -31,7 +31,7 @@ public class TransactionController {
      * @throws UserNotFoundException
      */
     @GetMapping
-    public ResponseEntity<?> getAllTransactions(@PathVariable("categoryId") Long categoryId, @LoginUser UserSession user) throws UserNotFoundException, ResourceNotFoundException {
+    public ResponseEntity<?> getAllTransactions(@PathVariable("categoryId") Long categoryId, @LoginUser UserSession user) throws ResourceNotFoundException {
         return new ResponseEntity<>(transactionService.getAllTransactions(user.getEmail(), categoryId), HttpStatus.OK);
     }
 
@@ -46,10 +46,9 @@ public class TransactionController {
      * @throws ResourceNotFoundException
      */
     @GetMapping(path = "/{transactionId}")
-    public ResponseEntity<?> getTransaction(@PathVariable("categoryId") Long categoryId, @PathVariable("transactionId") Long transactionId, @LoginUser UserSession user) throws UserNotFoundException, ResourceNotFoundException {
+    public ResponseEntity<?> getTransaction(@PathVariable Long categoryId, @PathVariable Long transactionId, @LoginUser UserSession user) throws ResourceNotFoundException {
         return new ResponseEntity<>(transactionService.getTransaction(user.getEmail(), categoryId, transactionId), HttpStatus.OK);
     }
-
 
     /**
      * 트랜잭션 추가
@@ -78,7 +77,7 @@ public class TransactionController {
      * @throws ResourceNotFoundException
      */
     @PutMapping(path = "/{transactionId}")
-    public ResponseEntity<?> updateTransaction(@PathVariable("categoryId") Long categoryId, @PathVariable("transactionId") Long transactionId, @RequestBody UpdateDto updateDto, @LoginUser UserSession user) throws UserNotFoundException, ResourceNotFoundException {
+    public ResponseEntity<?> updateTransaction(@PathVariable Long categoryId, @PathVariable Long transactionId, @RequestBody UpdateDto updateDto, @LoginUser UserSession user) throws ResourceNotFoundException {
         return new ResponseEntity<>(transactionService.updateTransaction(user.getEmail(), categoryId, transactionId, updateDto), HttpStatus.OK);
     }
 
@@ -91,7 +90,7 @@ public class TransactionController {
      * @return
      */
     @DeleteMapping(path = "/{transactionId}")
-    public ResponseEntity<?> deleteTransaction(@PathVariable("categoryId") Long categoryId, @PathVariable("transactionId") Long transactionId, @LoginUser UserSession user) throws ResourceNotFoundException, UserNotFoundException {
+    public ResponseEntity<?> deleteTransaction(@PathVariable Long categoryId, @PathVariable Long transactionId, @LoginUser UserSession user) throws ResourceNotFoundException {
         transactionService.deleteTransaction(user.getEmail(), categoryId, transactionId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

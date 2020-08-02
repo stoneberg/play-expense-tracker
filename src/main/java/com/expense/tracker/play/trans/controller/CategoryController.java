@@ -83,8 +83,6 @@ public class CategoryController {
      */
     @PostMapping
     public ResponseEntity<?> addCategory(@RequestBody CreateDto createDto, @LoginUser UserSession user) throws UserNotFoundException {
-        log.info("1======================>{}", user);
-        log.info("2======================>{}", user.getEmail());
         return new ResponseEntity<>(categoryService.addCategory(user.getEmail(), createDto), HttpStatus.CREATED);
     }
 

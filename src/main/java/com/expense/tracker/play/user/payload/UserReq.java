@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 public class UserReq {
 
     @Data
-    public static class CreateUserDto {
+    public static class CreateDto {
 
         @Size(min = 2, max = 20)
         @NotBlank(message = "FirstName is mandatory field. please provide firstName")
@@ -39,7 +39,7 @@ public class UserReq {
     }
 
     @Data
-    public static class LoginUserDto {
+    public static class LoginDto {
         @Size(min = 10, max = 30)
         @Email(message = "Email is mandatory field. please provide valid email")
         private String email;
