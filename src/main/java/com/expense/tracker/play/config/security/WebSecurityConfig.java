@@ -1,9 +1,9 @@
 package com.expense.tracker.play.config.security;
 
+import com.expense.tracker.play.common.utils.JwtUtil;
 import com.expense.tracker.play.config.security.jwt.JwtAuthEntryPoint;
 import com.expense.tracker.play.config.security.jwt.JwtAuthenticationFilter;
 import com.expense.tracker.play.config.security.jwt.JwtAuthorizationFilter;
-import com.expense.tracker.play.config.security.jwt.JwtConfig;
 import com.expense.tracker.play.config.security.service.CustomUserDetailsService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -30,13 +30,13 @@ import java.util.Arrays;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomUserDetailsService userDetailsService;
-    private final JwtConfig jwtConfig;
+    private final JwtUtil jwtUtil;
     private final JwtAuthEntryPoint unauthorizedHandler;
 
     public WebSecurityConfig(CustomUserDetailsService userDetailsService,
-                             JwtConfig jwtConfig, JwtAuthEntryPoint unauthorizedHandler) {
+                             JwtUtil jwtUtil, JwtAuthEntryPoint unauthorizedHandler) {
         this.userDetailsService = userDetailsService;
-        this.jwtConfig = jwtConfig;
+        this.jwtUtil = jwtUtil;
         this.unauthorizedHandler = unauthorizedHandler;
     }
 
@@ -54,8 +54,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtConfig))
-                .addFilterAfter(new JwtAuthorizationFilter(userDetailsService, jwtConfig), JwtAuthenticationFilter.class)
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtUtil))
+                .addFilterAfter(new JwtAuthorizationFilter(userDetailsService, jwtUtil), JwtAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
@@ -74,7 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE"));
         configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "TOKEN_ID", "X-Requested-With", "Authorization", "Content-Type", "Content-Length", "Cache-Control"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "X-Requested-With", "Content-Type", "Content-Length", "Cache-Control"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

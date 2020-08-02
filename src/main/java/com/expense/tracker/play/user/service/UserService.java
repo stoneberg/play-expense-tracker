@@ -3,19 +3,14 @@ package com.expense.tracker.play.user.service;
 import com.expense.tracker.play.common.exception.AuthenticationFailedException;
 import com.expense.tracker.play.common.exception.EmailDuplicationException;
 import com.expense.tracker.play.common.exception.UserNotFoundException;
-import com.expense.tracker.play.common.utils.JwtTokenUtil;
-import com.expense.tracker.play.user.domain.User;
-import com.expense.tracker.play.user.payload.UserReq;
+import com.expense.tracker.play.common.utils.JwtUtil;
 import com.expense.tracker.play.user.payload.UserReq.CreateDto;
-import com.expense.tracker.play.user.payload.UserReq.LoginDto;
 import com.expense.tracker.play.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,7 +19,7 @@ import java.util.Map;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtUtil jwtUtil;
 
     /**
      * 사용자 등록
@@ -62,6 +57,6 @@ public class UserService {
 //            throw new AuthenticationFailedException();
 //        }
 //        // create jwt token and send to user
-//        return jwtTokenUtil.generateJwtToken(user);
+//        return jwtUtil.generateJwtToken(user.getUsername);
 //    }
 }

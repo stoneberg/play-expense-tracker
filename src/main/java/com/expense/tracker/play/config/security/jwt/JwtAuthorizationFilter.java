@@ -1,8 +1,8 @@
 package com.expense.tracker.play.config.security.jwt;
 
+import com.expense.tracker.play.common.utils.JwtUtil;
 import com.google.common.base.Strings;
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,14 +27,14 @@ import static com.expense.tracker.play.config.security.jwt.JwtConstants.TOKEN_PR
  */
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
+    // private static final Logger logger = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
 
     private final UserDetailsService userDetailsService;
-    private final JwtConfig jwtConfig;
+    private final JwtUtil jwtUtil;
 
-    public JwtAuthorizationFilter(UserDetailsService userDetailsService, JwtConfig jwtConfig) {
+    public JwtAuthorizationFilter(UserDetailsService userDetailsService, JwtUtil jwtUtil) {
         this.userDetailsService = userDetailsService;
-        this.jwtConfig = jwtConfig;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -52,17 +52,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         try {
 
-            if (token != null) {
+            String username = jwtUtil.extractUsername(token);
 
-                String username = Jwts.parser()
-                        .setSigningKey(jwtConfig.getSecretKey().getBytes())
-                        .parseClaimsJws(token)
-                        .getBody()
-                        .getSubject();
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-
+                if (Boolean.TRUE.equals(jwtUtil.validateToken(token, userDetails))) {
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
                             = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
@@ -73,7 +68,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
 
         } catch (JwtException e) {
-            throw new IllegalStateException(String.format("Token %s cannot be trusted", token));
+            throw new IllegalStateException(String.format("Token %s is not valid!", token));
         }
 
         filterChain.doFilter(request, response);
