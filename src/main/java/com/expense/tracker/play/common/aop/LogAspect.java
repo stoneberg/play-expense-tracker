@@ -29,9 +29,9 @@ public class LogAspect {
         log.info("@[LogAspect : Start] - {}/{}", pjp.getSignature().getDeclaringTypeName(), pjp.getSignature().getName());
         long startTime = System.currentTimeMillis();
         
-        Object[] signatrueArgs = pjp.getArgs();
-        for (Object signatrueArg : signatrueArgs) {
-            this.printJsonFormatParamLog(pjp, signatrueArg);
+        Object[] signatureArgs = pjp.getArgs();
+        for (Object signatureArg : signatureArgs) {
+            this.printJsonFormatParamLog(pjp, signatureArg);
         }
         
         Object result = pjp.proceed();
