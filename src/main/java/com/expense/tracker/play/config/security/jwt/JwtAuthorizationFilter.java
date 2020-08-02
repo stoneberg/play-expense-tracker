@@ -68,7 +68,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
 
         } catch (JwtException e) {
-            throw new IllegalStateException(String.format("Token %s is not valid!", token));
+            throw new IllegalStateException(String.format("Token [%s] is not valid!", token));
         }
 
         filterChain.doFilter(request, response);
