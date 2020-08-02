@@ -13,12 +13,8 @@ public class UserReq {
     public static class CreateDto {
 
         @Size(min = 2, max = 20)
-        @NotBlank(message = "FirstName is mandatory field. please provide firstName")
-        private String firstName;
-
-        @Size(min = 2, max = 20)
-        @NotBlank(message = "LastName is mandatory field. please provide lastName")
-        private String lastName;
+        @NotBlank(message = "Username is mandatory field. please provide username")
+        private String username;
 
         @Size(min = 10, max = 30)
         @Email(message = "Email is mandatory field. please provide a valid email")
@@ -29,8 +25,7 @@ public class UserReq {
 
         public User toEntity() {
             return User.builder()
-                    .firstName(this.firstName)
-                    .lastName(this.lastName)
+                    .username(this.username)
                     .email(this.email)
                     .password(this.password)
                     .build();

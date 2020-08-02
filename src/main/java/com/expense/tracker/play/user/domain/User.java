@@ -7,33 +7,52 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "et_users")
+@Table(	name = "et_users",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "username"),
+                @UniqueConstraint(columnNames = "email")
+        })
 public class User extends AuditorBaseEntity<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Size(min = 2, max = 20)
     @Column(length = 20, nullable = false)
-    private String firstName;
+    private String username;
 
-    @Column(length = 20, nullable = false)
-    private String lastName;
-
-    @Column(length = 30, nullable = false)
+    @NotBlank
+    @Size(max = 50)
+    @Column(length = 50, nullable = false)
     private String email;
 
-    @Column(columnDefinition="text not null")
+    @NotBlank
+    @Size(max = 120)
+    @Column(length = 120, nullable = false)
     private String password;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(	name = "et_user_roles",
+            joinColumns = @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "FK_USER")),
+            inverseJoinColumns = @JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "FK_ROLE")),
+            foreignKey = @ForeignKey(name = "FK_USER"),
+            inverseForeignKey = @ForeignKey(name = "FK_ROLE")
+    )
+    private Set<Role> roles = new HashSet<>();
+
     @Builder
-    public User(String firstName, String lastName, String email, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String username, String email, String password) {
+        this.username = username;
         this.email = email;
         this.password = password;
     }

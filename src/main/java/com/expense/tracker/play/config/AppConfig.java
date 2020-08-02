@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -23,12 +25,12 @@ public class AppConfig implements WebMvcConfigurer {
         argumentResolvers.add(loginUserArgumentResolver);
     }
 
-    @Bean
-    public FilterRegistrationBean<AuthFilter> filterRegistrationBean(AuthFilter authFilter) {
-        FilterRegistrationBean<AuthFilter> registration = new FilterRegistrationBean<>();
-        registration.setFilter(authFilter);
-        registration.addUrlPatterns("/api/categories/*");
-        return registration;
-    }
+//    @Bean
+//    public FilterRegistrationBean<AuthFilter> filterRegistrationBean(AuthFilter authFilter) {
+//        FilterRegistrationBean<AuthFilter> registration = new FilterRegistrationBean<>();
+//        registration.setFilter(authFilter);
+//        registration.addUrlPatterns("/api/categories/*");
+//        return registration;
+//    }
 
 }

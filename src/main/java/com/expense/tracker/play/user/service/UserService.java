@@ -52,16 +52,16 @@ public class UserService {
      * @throws UserNotFoundException
      * @throws AuthenticationFailedException
      */
-    public Map<String, Object> loginUser(LoginDto loginDto) throws UserNotFoundException, AuthenticationFailedException {
-        // check user exists
-        User user = userRepository.findByEmail(loginDto.getEmail())
-                .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", loginDto.getEmail())));
-        // check password correct
-        boolean passwordMatch = BCrypt.checkpw(loginDto.getPassword(), user.getPassword());
-        if (!passwordMatch) {
-            throw new AuthenticationFailedException();
-        }
-        // create jwt token and send to user
-        return jwtTokenUtil.generateJwtToken(user);
-    }
+//    public Map<String, Object> loginUser(LoginDto loginDto) throws UserNotFoundException, AuthenticationFailedException {
+//        // check user exists
+//        User user = userRepository.findByEmail(loginDto.getEmail())
+//                .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", loginDto.getEmail())));
+//        // check password correct
+//        boolean passwordMatch = BCrypt.checkpw(loginDto.getPassword(), user.getPassword());
+//        if (!passwordMatch) {
+//            throw new AuthenticationFailedException();
+//        }
+//        // create jwt token and send to user
+//        return jwtTokenUtil.generateJwtToken(user);
+//    }
 }

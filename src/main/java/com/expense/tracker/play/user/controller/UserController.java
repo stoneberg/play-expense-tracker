@@ -23,7 +23,7 @@ import javax.validation.Valid;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/auth")
 public class UserController {
 
     private final UserService userService;
@@ -48,9 +48,9 @@ public class UserController {
      * @throws BadRequestException
      * @throws AuthenticationFailedException
      */
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginDto loginDto) throws UserNotFoundException, AuthenticationFailedException {
-        return new ResponseEntity<>(userService.loginUser(loginDto), HttpStatus.OK);
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginDto loginDto) throws UserNotFoundException, AuthenticationFailedException {
+//        return new ResponseEntity<>(userService.loginUser(loginDto), HttpStatus.OK);
+//    }
 
 }

@@ -11,13 +11,11 @@ public class UserRes {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class LoginUserDto {
-        private String firstName;
-        private String lastName;
+        private String username;
         private String email;
 
         public LoginUserDto(User user) {
-            this.firstName = user.getFirstName();
-            this.lastName = user.getLastName();
+            this.username = user.getUsername();
             this.email = user.getEmail();
         }
     }

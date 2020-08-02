@@ -13,21 +13,19 @@ import java.util.Map;
 @Component
 public class JwtTokenUtil {
 
-    @Value("${app.jwt.secret-key}")
+    @Value("${app.jwt.secretKey}")
     private String secretKey;
 
     // [7,200,000] 2 X 60 X 60 X 1000 => 2시간
-    @Value("${app.jwt.token-validity}")
-    private Long tokenValidity;
+    @Value("${app.jwt.tokenExpiration}")
+    private Long tokenExpiration;
 
     public Map<String, Object> generateJwtToken(User user) {
         long timestamp = System.currentTimeMillis();
         String jwtToken = Jwts.builder().signWith(SignatureAlgorithm.HS256, secretKey)
                 .setIssuedAt(new Date(timestamp))
-                .setExpiration(new Date(timestamp + tokenValidity))
+                .setExpiration(new Date(timestamp + tokenExpiration))
                 .claim("email", user.getEmail())
-                .claim("firstName", user.getFirstName())
-                .claim("lastName", user.getLastName())
                 .compact();
         Map<String, Object> tokenMap = new HashMap<>();
         tokenMap.put("token", jwtToken);

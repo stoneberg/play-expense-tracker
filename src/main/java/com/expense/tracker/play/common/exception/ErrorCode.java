@@ -11,6 +11,7 @@ public enum ErrorCode {
 	USER_EXISTS("AUTH_ERR002", "이미 등록된 사용자입니다.", HttpStatus.BAD_REQUEST.value()), 
 	EMAIL_DUPLICATION("AUTH_ERR003", "사용 중인 이메일입니다.", HttpStatus.BAD_REQUEST.value()),
 	AUTHENTICATION_FAILED("AUTH_ERR004", "이메일과 비밀번호가 정확하지 않습니다.", HttpStatus.UNAUTHORIZED.value()),
+	JWT_TOKEN_INVALID("AUTH_ERR005", "토큰이 유효하지 않습니다.", HttpStatus.UNAUTHORIZED.value()),
 	INPUT_VALUE_INVALID("INVALID_ERR001", "입력 값이 올바르지 않습니다.", HttpStatus.BAD_REQUEST.value()),
 	METHOD_NOT_ALLOWED("INVALID_ERR002","지원되지 않는 메서드 요청입니다.", HttpStatus.METHOD_NOT_ALLOWED.value()),
 	RESOURCE_NOT_FOUND("INVALID_ERR003","해당 자원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND.value()),

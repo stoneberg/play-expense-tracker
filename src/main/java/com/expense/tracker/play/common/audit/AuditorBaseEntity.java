@@ -26,7 +26,7 @@ public abstract class AuditorBaseEntity<U> {
 	protected U updatedBy;
 
 	@CreatedDate
-	@Column(nullable = false, updatable = false)
+	@Column(updatable = false)
 	protected LocalDateTime createdDate;
 
 	@LastModifiedDate
