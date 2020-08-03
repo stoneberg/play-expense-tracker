@@ -4,13 +4,21 @@ import com.expense.tracker.play.common.exception.AuthenticationFailedException;
 import com.expense.tracker.play.common.exception.EmailDuplicationException;
 import com.expense.tracker.play.common.exception.UserNotFoundException;
 import com.expense.tracker.play.common.utils.JwtUtil;
+import com.expense.tracker.play.user.domain.ERole;
+import com.expense.tracker.play.user.domain.Role;
+import com.expense.tracker.play.user.domain.User;
 import com.expense.tracker.play.user.payload.UserReq.CreateDto;
+import com.expense.tracker.play.user.repository.RoleRepository;
 import com.expense.tracker.play.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
     /**
@@ -30,13 +40,18 @@ public class UserService {
      */
     @Transactional
     public Long registerUser(CreateDto createDto) throws EmailDuplicationException {
-        String email = createDto.getEmail();
-        if (userRepository.existsByEmail(email)) {
-            throw new EmailDuplicationException(String.format("Email [%s] is already in use", email));
+        if (userRepository.existsByEmail(createDto.getEmail())) {
+            throw new EmailDuplicationException(String.format("Email [%s] is already in use", createDto.getEmail()));
         }
-        String hashedPassword = BCrypt.hashpw(createDto.getPassword(), BCrypt.gensalt(10));
+        String hashedPassword = passwordEncoder.encode(createDto.getPassword());
         createDto.setPassword(hashedPassword);
-        return userRepository.save(createDto.toEntity()).getId();
+        User user = createDto.toEntity();
+        Role userRole = roleRepository.findByName(ERole.ROLE_USER);
+        Role guestRole = roleRepository.findByName(ERole.ROLE_GUEST);
+        //user.addUserRoles(Arrays.asList(userRole, guestRole));
+        user.addUserRoles(Collections.singletonList(userRole));
+
+        return userRepository.save(user).getId();
     }
 
     /**

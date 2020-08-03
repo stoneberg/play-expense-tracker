@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -56,4 +58,10 @@ public class User extends AuditorBaseEntity<String> {
         this.email = email;
         this.password = password;
     }
+
+    // set user roles
+    public void addUserRoles(List<Role> userRoles) {
+        roles.addAll(userRoles);
+    }
+
 }
