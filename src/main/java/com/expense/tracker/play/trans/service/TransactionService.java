@@ -39,7 +39,7 @@ public class TransactionService {
      * @throws ResourceNotFoundException
      */
     public List<FindDto> getAllTransactions(String email, Long categoryId) throws ResourceNotFoundException {
-        Category category = categoryRepository.findCategoryByIdAndUserEmail(categoryId, email)
+        Category category = categoryRepository.findByIdAndUserEmail(categoryId, email)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
 
         List<Transaction> transactions = transactionRepository.findByCategory(category);
@@ -56,7 +56,7 @@ public class TransactionService {
      * @throws ResourceNotFoundException
      */
     public FindDto getTransaction(String email, Long categoryId, Long transactionId) throws ResourceNotFoundException {
-        Category category = categoryRepository.findCategoryByIdAndUserEmail(categoryId, email)
+        Category category = categoryRepository.findByIdAndUserEmail(categoryId, email)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
         Transaction transaction = transactionRepository.findByIdAndCategory(transactionId, category)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", transactionId)));
@@ -78,7 +78,7 @@ public class TransactionService {
     public Long addTransaction(String email, Long categoryId, CreateDto createDto) throws UserNotFoundException, ResourceNotFoundException {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", email)));
-        Category category = categoryRepository.findCategoryByIdAndUserEmail(categoryId, email)
+        Category category = categoryRepository.findByIdAndUserEmail(categoryId, email)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
 
         Transaction transaction = Transaction.createTransaction(user, category, createDto);
@@ -103,7 +103,7 @@ public class TransactionService {
      */
     @Transactional
     public Long updateTransaction(String email, Long categoryId, Long transactionId, UpdateDto updateDto) throws ResourceNotFoundException {
-        Category category = categoryRepository.findCategoryByIdAndUserEmail(categoryId, email)
+        Category category = categoryRepository.findByIdAndUserEmail(categoryId, email)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
         Transaction transaction = transactionRepository.findByIdAndCategory(transactionId, category)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", transactionId)));
@@ -123,7 +123,7 @@ public class TransactionService {
      */
     @Transactional
     public void deleteTransaction(String email, Long categoryId, Long transactionId) throws ResourceNotFoundException {
-        Category category = categoryRepository.findCategoryByIdAndUserEmail(categoryId, email)
+        Category category = categoryRepository.findByIdAndUserEmail(categoryId, email)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
         Transaction transaction = transactionRepository.findByIdAndCategory(transactionId, category)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", transactionId)));

@@ -27,7 +27,7 @@ public class Category extends AuditorBaseEntity<String> {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = CascadeType.ALL)
     private List<Transaction> transactions = new ArrayList<>();
 
     @Column(length = 20, nullable = false)
@@ -38,7 +38,6 @@ public class Category extends AuditorBaseEntity<String> {
 
     @Column(columnDefinition="Decimal(10, 2) default '0.00'")
     private Double totalExpense = 0.00;
-
 
     @Builder
     public Category(User user, String title, String description) {
@@ -62,7 +61,6 @@ public class Category extends AuditorBaseEntity<String> {
                 .description(dto.getDescription())
                 .build();
     }
-
 
     // update category
     public void updateCategory(UpdateDto dto) {
