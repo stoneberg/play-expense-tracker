@@ -4,17 +4,18 @@ import com.expense.tracker.play.common.audit.AuditorBaseEntity;
 import com.expense.tracker.play.trans.payload.CategoryReq.CreateDto;
 import com.expense.tracker.play.trans.payload.CategoryReq.UpdateDto;
 import com.expense.tracker.play.user.domain.User;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "et_categories")
 public class Category extends AuditorBaseEntity<String> {

@@ -3,6 +3,7 @@ package com.expense.tracker.play.trans.service;
 import com.expense.tracker.play.common.exception.ResourceNotFoundException;
 import com.expense.tracker.play.common.exception.UserNotFoundException;
 import com.expense.tracker.play.trans.domain.Category;
+import com.expense.tracker.play.trans.mapper.CategoryMapper;
 import com.expense.tracker.play.trans.payload.CategoryReq;
 import com.expense.tracker.play.trans.payload.CategoryReq.UpdateDto;
 import com.expense.tracker.play.trans.payload.CategoryRes.FindDto;
@@ -26,6 +27,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryQuerydslRepository categoryQuerydslRepository;
     private final UserRepository userRepository;
+    private final CategoryMapper categoryMapper;
 
     /**
      * 카테고리 목록 조회
@@ -38,7 +40,7 @@ public class CategoryService {
 //        User user = userRepository.findByEmail(email)
 //                .orElseThrow(() -> new UserNotFoundException(String.format("User [%s] not exists", email)));
         List<Category> categories = categoryRepository.findAllByUserEmail(email);
-        return categories.stream().map(FindDto::new).collect(Collectors.toList());
+        return categoryMapper.toFindDtos(categories);
     }
 
     /**
@@ -53,7 +55,7 @@ public class CategoryService {
     public FindDto getCategory(String email, Long categoryId) throws ResourceNotFoundException {
         Category category = categoryRepository.findByIdAndUserEmail(categoryId, email)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
-        return FindDto.toDto(category);
+        return categoryMapper.toFindDto(category);
     }
 
     /**

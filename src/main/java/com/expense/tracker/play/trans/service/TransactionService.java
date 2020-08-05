@@ -4,9 +4,9 @@ import com.expense.tracker.play.common.exception.ResourceNotFoundException;
 import com.expense.tracker.play.common.exception.UserNotFoundException;
 import com.expense.tracker.play.trans.domain.Category;
 import com.expense.tracker.play.trans.domain.Transaction;
+import com.expense.tracker.play.trans.mapper.TransactionMapper;
 import com.expense.tracker.play.trans.payload.TransactionReq.CreateDto;
 import com.expense.tracker.play.trans.payload.TransactionReq.UpdateDto;
-import com.expense.tracker.play.trans.payload.TransactionRes;
 import com.expense.tracker.play.trans.payload.TransactionRes.FindDto;
 import com.expense.tracker.play.trans.repository.CategoryRepository;
 import com.expense.tracker.play.trans.repository.TransactionRepository;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,6 +28,7 @@ public class TransactionService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final TransactionRepository transactionRepository;
+    private final TransactionMapper transactionMapper;
 
     /**
      * 트랜잭션 목록 조회
@@ -41,9 +41,8 @@ public class TransactionService {
     public List<FindDto> getAllTransactions(String email, Long categoryId) throws ResourceNotFoundException {
         Category category = categoryRepository.findByIdAndUserEmail(categoryId, email)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
-
         List<Transaction> transactions = transactionRepository.findByCategory(category);
-        return transactions.stream().map(FindDto::new).collect(Collectors.toList());
+        return transactionMapper.toFindDtos(transactions);
     }
 
     /**
@@ -60,8 +59,7 @@ public class TransactionService {
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", categoryId)));
         Transaction transaction = transactionRepository.findByIdAndCategory(transactionId, category)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Category [%s] not exists", transactionId)));
-
-        return TransactionRes.FindDto.toDto(transaction);
+        return transactionMapper.toFindDto(transaction);
     }
 
     /**

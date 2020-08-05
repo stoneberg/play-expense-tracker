@@ -10,8 +10,9 @@ import javax.persistence.*;
 
 @Builder
 @Getter
+@Setter
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Entity
 @Table(name = "et_transactions")
 public class Transaction extends AuditorBaseEntity<String> {
