@@ -56,6 +56,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         String token = authorizationHeader.replace(TOKEN_PREFIX, StringUtils.EMPTY);
 
+        if (jwtUtil.isTokenExpired(token)) {
+            throw new IllegalStateException(String.format("Your token ===> [%s] has expired!", token));
+        }
+
         try {
             CustomUserDetails customUserDetails = (CustomUserDetails) restoreCustomUserDetails(token);
             setSecurityContextHolderContextAuthentication(customUserDetails, request);
@@ -63,14 +67,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-                if (Boolean.TRUE.equals(jwtUtil.validateToken(token, userDetails))) {
-                    setSecurityContextHolderContextAuthentication(userDetails, request);
-                }
+                setSecurityContextHolderContextAuthentication(userDetails, request);
             }
 
         } catch (JwtException e) {
-            throw new IllegalStateException(String.format("This Token ===> [%s] is not valid!!!", token));
+            throw new IllegalStateException(String.format("Your token ===> [%s] is invalid!", token));
         }
 
         filterChain.doFilter(request, response);
@@ -78,12 +79,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @SuppressWarnings("unchecked")
     public UserDetails restoreCustomUserDetails(String token) {
-        Claims body = jwtUtil.extractClaimBody(token);
-        Integer id = (Integer) body.get("id");
-        String email = (String) body.get("email");
-        String username = (String) body.get("username");
-        String password = (String) body.get("password");
-        List<Map<String, String>> authorities = (List<Map<String, String>>) body.get("authorities");
+        Claims claims = jwtUtil.extractAllClaims(token);
+        Integer id = (Integer) claims.get("id");
+        String email = (String) claims.get("email");
+        String username = (String) claims.get("username");
+        String password = (String) claims.get("password");
+        List<Map<String, String>> authorities = (List<Map<String, String>>) claims.get("authorities");
 
         Set<SimpleGrantedAuthority> simpleGrantedAuthorities = authorities.stream()
                 .map(m -> new SimpleGrantedAuthority(m.get("authority"))).collect(Collectors.toSet());
