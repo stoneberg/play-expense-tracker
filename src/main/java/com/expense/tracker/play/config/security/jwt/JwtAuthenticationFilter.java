@@ -1,6 +1,5 @@
 package com.expense.tracker.play.config.security.jwt;
 
-import com.expense.tracker.play.common.utils.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +39,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
      * 인증을 위해 request에서 username, password를 추출, UsernamePasswordAuthenticationToken에 적재
      */
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
-            throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
         try {
             JwtRequest credentials = new ObjectMapper().readValue(req.getInputStream(), JwtRequest.class);
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getUsername(),

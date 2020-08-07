@@ -25,5 +25,5 @@ spring:
 
 app:
   jwt:
-    secretKey: HersoulslidesawayDontlookbackinanger
+    secretKey: AsItraveldownlife'shighway,thingsain'tgoingmyway
     tokenExpiration: 7200000 # [7,200,000] 2 X 60 X 60 X 1000 => 2시간

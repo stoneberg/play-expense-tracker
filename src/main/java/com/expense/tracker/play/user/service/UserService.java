@@ -3,7 +3,7 @@ package com.expense.tracker.play.user.service;
 import com.expense.tracker.play.common.exception.AuthenticationFailedException;
 import com.expense.tracker.play.common.exception.EmailDuplicationException;
 import com.expense.tracker.play.common.exception.UserNotFoundException;
-import com.expense.tracker.play.common.utils.JwtUtil;
+import com.expense.tracker.play.config.security.jwt.JwtUtil;
 import com.expense.tracker.play.user.domain.ERole;
 import com.expense.tracker.play.user.domain.Role;
 import com.expense.tracker.play.user.domain.User;
@@ -12,12 +12,10 @@ import com.expense.tracker.play.user.repository.RoleRepository;
 import com.expense.tracker.play.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 @Slf4j

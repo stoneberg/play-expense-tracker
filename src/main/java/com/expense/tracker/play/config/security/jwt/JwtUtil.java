@@ -1,4 +1,4 @@
-package com.expense.tracker.play.common.utils;
+package com.expense.tracker.play.config.security.jwt;
 
 import com.expense.tracker.play.config.security.jwt.JwtConfig;
 import io.jsonwebtoken.Claims;

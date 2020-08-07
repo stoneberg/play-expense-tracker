@@ -1,6 +1,6 @@
 package com.expense.tracker.play.config.security;
 
-import com.expense.tracker.play.common.utils.JwtUtil;
+import com.expense.tracker.play.config.security.jwt.JwtUtil;
 import com.expense.tracker.play.config.security.jwt.JwtAuthEntryPoint;
 import com.expense.tracker.play.config.security.jwt.JwtAuthenticationFilter;
 import com.expense.tracker.play.config.security.jwt.JwtAuthorizationFilter;
