@@ -1,7 +1,8 @@
 package com.expense.tracker.play.config.security.jwt;
 
-import com.expense.tracker.play.config.security.jwt.JwtConfig;
+import com.expense.tracker.play.config.security.service.CustomUserDetails;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,10 @@ public class JwtUtil {
         return extractClaim(token, Claims::getSubject);
     }
 
+    public Claims extractClaimBody(String token) {
+        return Jwts.parser().setSigningKey(jwtConfig.getSecretKey()).parseClaimsJws(token).getBody();
+    }
+
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
@@ -40,8 +45,13 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String username, CustomUserDetails customUserDetails) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("id", customUserDetails.getId());
+        claims.put("username", customUserDetails.getUsername());
+        claims.put("password", customUserDetails.getPassword());
+        claims.put("email", customUserDetails.getEmail());
+        claims.put("authorities", customUserDetails.getAuthorities());
         return createToken(claims, username);
     }
 
