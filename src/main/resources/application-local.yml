@@ -24,6 +24,6 @@ spring:
 
 
 app:
-  jwt:
-    secretKey: AsItraveldownlife'shighway,thingsain'tgoingmyway
+  jwt: # Never bend your head. Hold it high. Look the world straight in the eye.
+    secretKey: TmV2ZXIgYmVuZCB5b3VyIGhlYWQuIEhvbGQgaXQgaGlnaC4gTG9vayB0aGUgd29ybGQgc3RyYWlnaHQgaW4gdGhlIGV5ZS4=
     tokenExpiration: 7200000 # [7,200,000] 2 X 60 X 60 X 1000 => 2시간
