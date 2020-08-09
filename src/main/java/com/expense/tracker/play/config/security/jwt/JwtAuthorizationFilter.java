@@ -56,10 +56,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         String token = authorizationHeader.replace(TOKEN_PREFIX, StringUtils.EMPTY);
 
-//        if (jwtUtil.isTokenExpired(token)) {
-//            throw new IllegalStateException(String.format("Your token ===> [%s] has expired!", token));
-//        }
-
         try {
             CustomUserDetails customUserDetails = (CustomUserDetails) restoreCustomUserDetails(token);
             setSecurityContextHolderContextAuthentication(customUserDetails, request);
