@@ -9,6 +9,6 @@ public class PrettySqlMultiLineFormatter implements MessageFormattingStrategy {
 
     @Override
     public String formatMessage(int connectionId, String now, long elapsed, String category, String prepared, String sql, String url) {
-        return "#" + now + " | took " + elapsed + "ms | " + category + " | connection " + connectionId + " | " + FORMATTER.format(sql) + ";";
+        return "[SQL] " + now + " | took " + elapsed + "ms | " + category + " | connection " + connectionId + " | " + FORMATTER.format(sql) + ";";
     }
 }
