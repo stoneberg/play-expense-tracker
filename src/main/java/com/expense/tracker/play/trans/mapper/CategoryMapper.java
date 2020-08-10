@@ -16,5 +16,6 @@ public interface CategoryMapper {
     // @Mapping(target = "transactions", ignore = true)
     FindDto toFindDto(Category category);
 
+    // 여기에서도 위와 같이 ignore 선언을 하면 에러가 발생한다.
     List<FindDto> toFindDtos(List<Category> categories);
 }
