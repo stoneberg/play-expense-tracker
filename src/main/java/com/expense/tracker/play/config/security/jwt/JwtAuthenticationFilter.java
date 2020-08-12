@@ -15,15 +15,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static com.expense.tracker.play.config.security.jwt.JwtConstants.AUTH_HEADER;
-import static com.expense.tracker.play.config.security.jwt.JwtConstants.TOKEN_PREFIX;
-
 /**
  * 사용자 Credential 인증
  */
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
@@ -52,10 +49,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
      * 인증 성공 시 Access Token 발급
      */
     @Override
-    protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) {
+    protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException {
         CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
-        String token = jwtUtil.generateToken(auth.getName(), customUserDetails);
-        logger.info("@issuing token===============>{}", token);
-        res.addHeader(AUTH_HEADER, TOKEN_PREFIX + token);
+        // res.addHeader(AUTH_HEADER, TOKEN_PREFIX + token);
+        jwtUtil.jwtAuthResponse(customUserDetails, res);
     }
 }
