@@ -4,6 +4,7 @@ import com.expense.tracker.play.config.security.service.CustomUserDetails;
 import com.google.common.base.Strings;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +80,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         Integer id = (Integer) claims.get("id");
         String email = (String) claims.get("email");
         String username = (String) claims.get("username");
-        String password = (String) claims.get("password");
+        String password = RandomStringUtils.randomAlphanumeric(10);
         List<Map<String, String>> authorities = (List<Map<String, String>>) claims.get("authorities");
 
         Set<SimpleGrantedAuthority> simpleGrantedAuthorities = authorities.stream()
