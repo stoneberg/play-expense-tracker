@@ -79,6 +79,13 @@ public class CustomGlobalRestExceptionHandler {
         return buildFieldErrors(ErrorCode.INPUT_VALUE_INVALID, request, fieldErrors);
     }
 
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleBindException(BindException ex, WebRequest request) {
+        final List<ErrorResponse.FieldError> fieldErrors = getFieldErrors(ex.getBindingResult());
+        return buildFieldErrors(ErrorCode.INPUT_VALUE_INVALID, request, fieldErrors);
+    }
+
     // Invalid argument type
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -86,19 +93,11 @@ public class CustomGlobalRestExceptionHandler {
     	return buildError(ErrorCode.INPUT_VALUE_INVALID, ex.getMessage(), request);
     }
 
-    @ExceptionHandler(BindException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ErrorResponse handleBindException(BindException ex, WebRequest request) {
-        final List<ErrorResponse.FieldError> fieldErrors = getFieldErrors(ex.getBindingResult());
-        return buildFieldErrors(ErrorCode.INPUT_VALUE_INVALID, request, fieldErrors);
-    }
-    
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleConstraintViolationException(ConstraintViolationException ex, WebRequest request) {
         final ErrorCode errorCode = ErrorCode.INPUT_VALUE_INVALID;
         final String message = getResultMessage(ex.getConstraintViolations().iterator());
-        log.error(errorCode.getMessage(), ex.getConstraintViolations());
         return buildError(errorCode, message, request);
     }
 

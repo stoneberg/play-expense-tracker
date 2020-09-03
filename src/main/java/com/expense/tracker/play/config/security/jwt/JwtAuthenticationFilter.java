@@ -50,8 +50,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
      */
     @Override
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException {
-        CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
+        //CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
         // res.addHeader(AUTH_HEADER, TOKEN_PREFIX + token);
-        jwtUtil.jwtAuthResponse(customUserDetails, res);
+        //jwtUtil.jwtAuthResponse(customUserDetails, res);
     }
 }

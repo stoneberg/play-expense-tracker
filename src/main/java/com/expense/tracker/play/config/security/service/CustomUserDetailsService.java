@@ -19,6 +19,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//		String[] userPk =  username.split("\\|");
+//		String userId = userPk[0];
+//		String companyId = userPk[1];
+
 		User user = userRepository.findByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 
